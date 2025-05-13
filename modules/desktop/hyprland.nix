@@ -303,7 +303,7 @@ in
   
   # Download the default wallpaper using a shell script
   home.activation = {
-    downloadWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    downloadWallpaper = dag.entryAfter ["writeBoundary"] ''
       $DRY_RUN_CMD mkdir -p $VERBOSE_ARG $HOME/.config/wallpapers
       
       if [ ! -f $HOME/.config/wallpapers/catppuccin.png ]; then
