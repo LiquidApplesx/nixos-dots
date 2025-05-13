@@ -113,6 +113,9 @@
     package = pkgs.nixVersions.stable;  # Updated package name
     extraOptions = "experimental-features = nix-command flakes";
   };
+  
+  #Zen Browser flake
+  inputs.zen-browser.packages."${system}".default
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
