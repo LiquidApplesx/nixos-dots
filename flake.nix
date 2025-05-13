@@ -1,9 +1,7 @@
 {
   description = "NixOS configuration with Hyprland and Catppuccin Mocha theme";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,14 +15,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs = { self, nixpkgs, home-manager, hyprland, catppuccin-nix, ... }@inputs:
     let
       system = "x86_64-linux"; # Adjust for your system architecture
       pkgs = nixpkgs.legacyPackages.${system};
       
-      # Import your hardware configuration
-      inherit (self) outputs;
+      # Define shared modules
+      sharedModules = [
+        ./modules/gaming/amd.nix
+        ./modules/gaming/steam.nix
+      ];
     in
     {
       nixosConfigurations = {
@@ -33,16 +33,8 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./configuration.nix
-
-	    # Import gaming module at system level
-            ./modules/gaming/amd.nix
-            ./modules/gaming/steam.nix
-           
-	    # Import system modules
-	    ./modules/system/shell.nix
-
-	    ] ++ sharedModules ++ [
-
+            # Import system modules
+            ./modules/system/shell.nix
             # Import Hyprland NixOS module
             hyprland.nixosModules.default
             
@@ -53,15 +45,13 @@
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.kari = import ./home.nix;
-	      home-manager.backupFileExtension = "backup";
+              home-manager.backupFileExtension = "backup";
             }
-          ];
+          ] ++ sharedModules;
         };
-      };
-    };
-    
-    # ISO installer configuration
-    installer = nixpkgs.lib.nixosSystem {
+        
+        # ISO installer configuration
+        installer = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [
