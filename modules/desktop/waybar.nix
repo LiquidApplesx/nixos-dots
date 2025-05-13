@@ -37,11 +37,6 @@
             "7" = "VII";
             "8" = "VIII";
             "9" = "IX";
-            "active" = "";
-            "urgent" = "";
-            "persistent" = "";
-            "focused" = "";
-            "default" = "❂";
           };
           "persistent-workspaces" = {
             "*" = 9;
