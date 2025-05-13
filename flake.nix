@@ -35,6 +35,7 @@
             ./configuration.nix
             # Import system modules
             ./modules/system/shell.nix
+	    ./modules/system/nix/gc.nix
             # Import Hyprland NixOS module
             hyprland.nixosModules.default
             
