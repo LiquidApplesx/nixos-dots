@@ -41,6 +41,8 @@
 	    # Import system modules
 	    ./modules/system/shell.nix
 
+	    ] ++ sharedModules ++ [
+
             # Import Hyprland NixOS module
             hyprland.nixosModules.default
             
@@ -56,5 +58,26 @@
           ];
         };
       };
+    };
+
+    # ISO installer configuration
+        installer = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            # Base installer module
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix"
+            
+            # Custom installer configuration
+            ./modules/installer/configuration.nix
+          ] ++ sharedModules;
+        };
+      };
+      
+      # ISO output for easy building
+      packages.${system}.iso = self.nixosConfigurations.installer.config.system.build.isoImage;
+      
+      # Default package is the ISO
+      defaultPackage.${system} = self.packages.${system}.iso;
     };
 }
