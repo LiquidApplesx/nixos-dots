@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{lib,  config, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -294,5 +294,22 @@
       fi
     '';
     executable = true;
+  };
+  # Create a systemd user service to ensure hyprpaper starts properly
+  systemd.user.services.hyprpaper = {
+    Unit = {
+      Description = "Hyprland wallpaper daemon";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.hyprpaper}/bin/hyprpaper";
+      Restart = "on-failure";
+      RestartSec = 5;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 }

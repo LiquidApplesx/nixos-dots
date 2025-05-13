@@ -191,7 +191,6 @@
       
       #workspaces button:hover {
           color: @red;
-	  background-color: rgba(0, 0, 0, 0.2);
       }
       
       #workspaces button.persistent {
@@ -199,10 +198,10 @@
       }
       
       #workspaces button.active {
-          color: @rosewater;
+          color: @sapphire;
 	  background-color: rgba(246, 215, 214, 0.1);
 	  font-weight: bold;
-	  border-bottom: 3px solid @rosewater
+	  border-bottom: 3px solid @teal
       }
       
       #workspaces button.deafult {
@@ -210,7 +209,7 @@
       }
       
       #workspaces button.empty {
-          color: @surface0;
+          color: @rosewater;
       }
       
       #workspaces button.urgent {
