@@ -1,2 +1,1 @@
 # nixos-dots
-# nixos-dots
