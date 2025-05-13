@@ -8,7 +8,6 @@
     ./modules/desktop/hyprland.nix
     ./modules/theming/catppuccin.nix
     ./modules/shell/zsh.nix
-    ./modules/gaming
     # Add more modules as needed
   ];
 
@@ -21,12 +20,44 @@
     # Desktop environment packages 
     fastfetch
     firefox-devedition-bin
+    gamescope
     github-cli
     git
+    lutris
     neovim
     steam
   ];
-  
+
+  # MangoHud configuration for the user
+  xdg.configFile."MangoHud/MangoHud.conf".text = ''
+    ### MangoHud configuration file
+    legacy_layout=0
+    horizontal
+    gpu_stats
+    gpu_temp
+    gpu_load_change
+    cpu_stats
+    cpu_temp
+    cpu_mhz
+    cpu_load_change
+    ram
+    vram
+    fps
+    engine_version
+    vulkan_driver
+    frame_timing=1
+    frametime
+    frametimes_threshold=25,40
+    hud_no_margin
+    table_columns=14
+    font_size=20
+    background_alpha=0.4
+    position=top-left
+    toggle_hud=Shift_R+F12
+    toggle_logging=F11
+    output_file=/tmp/mangohud_log_%app_name%.csv
+  '';
+
   # This value determines the Home Manager release that your
   # configuration is compatible with.
   home.stateVersion = "24.11";

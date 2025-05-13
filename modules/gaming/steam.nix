@@ -30,13 +30,7 @@
       };
     };
   };
-
-  # MangoHud for performance monitoring in games
-  programs.mangohud = {
-    enable = true;
-    enableSessionWide = false;  # Only enable when needed
-  };
-  
+ 
   # Gaming-related packages
   environment.systemPackages = with pkgs; [
     # Must-have gaming tools
@@ -75,13 +69,53 @@
     jack.enable = true;
     
     # Low-latency audio
-    config.pipewire = {
-      "context.properties" = {
-        "default.clock.rate" = 48000;
-        "default.clock.quantum" = 32;
-        "default.clock.min-quantum" = 32;
-        "default.clock.max-quantum" = 32;
+    extraConfig = {
+      pipewire = {
+        "context.properties" = {
+          "default.clock.rate" = 48000;
+          "default.clock.quantum" = 32;
+          "default.clock.min-quantum" = 32;
+          "default.clock.max-quantum" = 32;
+	};
       };
     };
   };
+
+  # MangoHud configuration via environment
+  environment.variables = {
+    # Set up MangoHud to be available for all Vulkan applications
+    MANGOHUD = "1";
+    # Configure MangoHud display
+    MANGOHUD_CONFIG = "cpu_temp,gpu_temp,vram,ram,position=top-left,height=500,font_size=20";
+  };
+  
+  # Create a MangoHud config directory
+  environment.etc."xdg/MangoHud/MangoHud.conf".text = ''
+    ### MangoHud configuration file
+    legacy_layout=0
+    horizontal
+    gpu_stats
+    gpu_temp
+    gpu_load_change
+    cpu_stats
+    cpu_temp
+    cpu_mhz
+    cpu_load_change
+    ram
+    vram
+    fps
+    engine_version
+    vulkan_driver
+    frame_timing=1
+    frametime
+    frametimes_threshold=25,40
+    hud_no_margin
+    table_columns=14
+    font_size=20
+    background_alpha=0.4
+    position=top-left
+    toggle_hud=Shift_R+F12
+    toggle_logging=F11
+    output_file=/tmp/mangohud_log_%app_name%.csv
+  '';
 }

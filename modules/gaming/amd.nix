@@ -29,14 +29,14 @@
     # OpenGL configuration
     opengl = {
       enable = true;
-      driSupport = true;
+      # driSupport = true;
       driSupport32Bit = true;  # Needed for 32-bit games
       
       # Latest Mesa drivers
       extraPackages = with pkgs; [
-        rocm-opencl-icd        # OpenCL support
-        rocm-opencl-runtime    # OpenCL runtime
+        rocmPackages.clr          # ROCm OpenCL Runtime
         amdvlk                 # Vulkan support
+	mesa                      # Mesa drivers
       ];
       
       # 32-bit support for Steam and Wine games
@@ -46,7 +46,7 @@
       ];
 
       # Enable Vulkan
-      setLdLibraryPath = true;
+      # setLdLibraryPath = true;
     };
     
     # CPU optimizations
