@@ -15,21 +15,22 @@
     text = ''
       #!/bin/bash
 
-      export PATH="${PATH}:${HOME}/.local/bin/"
-
+      # Properly set PATH without referencing an undefined variable
+      PATH="$PATH:$HOME/.local/bin"
+      
       # Make sure we have the cache directory
-      mkdir -p "${HOME}/.cache/wal"
+      mkdir -p "$HOME/.cache/wal"
       
       # Initialize swww
       swww init
 
-      if [ -e "${HOME}/.cache/wal/colors" ]; then
+      if [ -e "$HOME/.cache/wal/colors" ]; then
           # Restore pywal colors
           ${pkgs.pywal}/bin/wal -R --cols16
           echo "Cached colors exist. Using existing colors."
           
           # Get saved wallpaper path
-          if [ -e "${HOME}/.cache/mywall" ]; then
+          if [ -e "$HOME/.cache/mywall" ]; then
               WALL=$(cat $HOME/.cache/mywall)
               
               # Set wallpaper using swww
@@ -38,17 +39,17 @@
               echo "Successfully restored wallpaper: $WALL"
           else
               # Default wallpaper if no cache exists
-              DEFAULT_WALL="${HOME}/.config/wallpapers/catppuccin.png"
+              DEFAULT_WALL="$HOME/.config/wallpapers/catppuccin.png"
               ${pkgs.swww}/bin/swww img "$DEFAULT_WALL" --transition-type grow --transition-pos "$(hyprctl cursorpos)" --transition-duration 2
-              echo "$DEFAULT_WALL" > "${HOME}/.cache/mywall"
+              echo "$DEFAULT_WALL" > "$HOME/.cache/mywall"
               echo "No cached wallpaper. Set default wallpaper."
           fi
       else
           # No cached colors, generate from default wallpaper
-          DEFAULT_WALL="${HOME}/.config/wallpapers/catppuccin.png"
+          DEFAULT_WALL="$HOME/.config/wallpapers/catppuccin.png"
           ${pkgs.pywal}/bin/wal -i "$DEFAULT_WALL" --cols16 -n
           ${pkgs.swww}/bin/swww img "$DEFAULT_WALL" --transition-type grow --transition-pos "$(hyprctl cursorpos)" --transition-duration 2
-          echo "$DEFAULT_WALL" > "${HOME}/.cache/mywall"
+          echo "$DEFAULT_WALL" > "$HOME/.cache/mywall"
           echo "Generated new colors from default wallpaper."
       fi
 
@@ -74,7 +75,8 @@
     text = ''
       #!/bin/bash
       
-      export PATH="${PATH}:${HOME}/.local/bin/"
+      # Properly set PATH without referencing an undefined variable
+      PATH="$PATH:$HOME/.local/bin"
       
       # Directory containing wallpapers
       WALLPAPER_DIR="$HOME/.config/wallpapers"
