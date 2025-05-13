@@ -165,11 +165,17 @@
     shellAliases = {
       ll = "ls -la";
       update = "sudo nixos-rebuild switch --flake ~/.config/nixos#nixos";
-      zz = "z -"; # Jump back to previous directory with zoxide
+      cc = "cd -"; # Jump back to previous directory with zoxide
     };
     
     # Initialize plugins and other zsh customizations
     initExtra = ''
+      # Run fastfetch when opening a new terminal
+      # Only run in interactive terminals and only if not a subshell
+      if [[ -o interactive ]] && [[ "$SHLVL" -eq 1 ]]; then
+        ${pkgs.fastfetch}/bin/fastfetch --load-config ${./fastfetch.jsonc}
+      fi
+
       # Load Powerlevel10k
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
 
@@ -182,7 +188,7 @@
       compinit
       
       # Initialize zoxide (better cd command)
-      eval "$(${pkgs.zoxide}/bin/zoxide init zsh)"
+      eval "$(${pkgs.zoxide}/bin/zoxide init zsh --cmd cd)"
     '';
   };
 
@@ -199,5 +205,35 @@
   # Set ZSH as the default shell
   home.sessionVariables = {
     SHELL = "${pkgs.zsh}/bin/zsh";
+  };
+  
+  xdg.configFile = {
+    "fastfetch/config.jsonc".text = ''
+      {
+          "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/fastfetch.jsonschema.json",
+          "display": {
+              "separator": "  "
+          },
+          "modules": [
+              "title",
+              "break",
+              "os",
+              "host",
+              "kernel",
+              "uptime",
+              "packages",
+              "shell",
+              "de",
+              "wm",
+              "terminal",
+              "cpu",
+              "gpu",
+              "memory",
+              "disk",
+              "break",
+              "colors"
+          ]
+      }
+    '';
   };
 }
