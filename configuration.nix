@@ -63,6 +63,7 @@
     neovim
     steam
     wget
+    inputs.zen-browser.packages."${system}".default
   ];
 
   # Fonts
