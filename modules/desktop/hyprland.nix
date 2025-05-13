@@ -259,7 +259,6 @@
       };
     };
   };
-
   # Hyprpaper configuration
   xdg.configFile."hypr/hyprpaper.conf".text = ''
     preload = ~/.config/wallpapers/catppuccin.png
@@ -298,14 +297,30 @@
 
   # Create wallpapers directory with a default wallpaper
   xdg.configFile."wallpapers/.keep".text = "";
-  home.activation.downloadWallpapers = pkgs.lib.hm.dag.entryAfter ["writeBoundary"] ''
-    # Create wallpapers directory if it doesn't exist
-    mkdir -p $HOME/.config/wallpapers
-    
-    # Download Catppuccin wallpaper if it doesn't exist
-    if [ ! -f $HOME/.config/wallpapers/catppuccin.png ]; then
-      echo "Downloading default Catppuccin wallpaper..."
-      ${pkgs.curl}/bin/curl -o $HOME/.config/wallpapers/catppuccin.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/minimalistic/catppuccin_gradient.png
-    fi
-  '';
+  
+  # Download the default wallpaper using a shell script
+  home.activation = {
+    downloadWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD mkdir -p $VERBOSE_ARG $HOME/.config/wallpapers
+      
+      if [ ! -f $HOME/.config/wallpapers/catppuccin.png ]; then
+        echo "Downloading default Catppuccin wallpaper..."
+        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/catppuccin.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/minimalistic/catppuccin_gradient.png
+      fi
+      
+      # Download additional Catppuccin wallpapers
+      if [ ! -f $HOME/.config/wallpapers/rainbow.png ]; then
+        echo "Downloading additional Catppuccin wallpapers..."
+        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/rainbow.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/landscapes/rainbow.png
+      fi
+      
+      if [ ! -f $HOME/.config/wallpapers/triangles.png ]; then
+        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/triangles.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/misc/catppuccin_triangles.png
+      fi
+      
+      if [ ! -f $HOME/.config/wallpapers/graph.png ]; then
+        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/graph.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/functional/graph.png
+      fi
+    '';
+  };
 }
