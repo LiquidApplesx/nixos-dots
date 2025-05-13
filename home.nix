@@ -24,6 +24,7 @@
     gamescope
     github-cli
     git
+    lazygit
     lutris
     neovim
     steam
