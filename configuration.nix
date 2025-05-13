@@ -60,7 +60,6 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    inputs.zen-browser.packages."${system}".default
     neovim
     steam
     wget

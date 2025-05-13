@@ -3,9 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
-    # Zen Browser flake
-    zen-browser.url = "github:MarceColl/zen-browser-flake";
     
     home-manager = {
       url = "github:nix-community/home-manager";
