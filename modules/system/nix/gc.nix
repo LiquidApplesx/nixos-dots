@@ -49,8 +49,8 @@
       ];
     };
     
-    # Cleanup the Nix registry
-    registry.nixpkgs.flake = pkgs.nixpkgs;
+    # Remove the problematic line that tried to reference pkgs.nixpkgs
+    # registry.nixpkgs.flake = pkgs.nixpkgs;
   };
 
   # Also optimize the disk space by configuring systemd to cleanup journal files
