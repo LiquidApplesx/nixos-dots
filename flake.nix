@@ -75,8 +75,10 @@
       };
       
       # ISO output for easy building
-      packages.${system}.iso = self.nixosConfigurations.installer.config.system.build.isoImage;
-      
+      packages.${system} = {
+        iso = self.nixosConfigurations.installer.config.system.build.isoImage;
+      };
+
       # Default package is the ISO
       defaultPackage.${system} = self.packages.${system}.iso;
     };
