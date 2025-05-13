@@ -8,6 +8,7 @@
     ./modules/desktop/hyprland.nix
     ./modules/desktop/waybar.nix
     ./modules/theming/catppuccin.nix
+    ./modules/theming/wallpaper.nix
     ./modules/shell/zsh.nix
     # Add more modules as needed
   ];

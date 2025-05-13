@@ -1,4 +1,4 @@
-{lib,  config, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
@@ -49,7 +49,7 @@
       # Execute apps at launch
       exec-once = waybar
       exec-once = dunst
-      exec-once = hyprpaper
+      exec-once = sleep 1 && ~/.config/hypr/scripts/init-wallpaper.sh
       
       # Input config
       input {
@@ -177,10 +177,8 @@
 
   # Install necessary packages for Hyprland
   home.packages = with pkgs; [
-    curl
     wofi
     dunst
-    hyprpaper
     wl-clipboard
     kdePackages.dolphin
   ];
@@ -258,58 +256,6 @@
         frame_color = "#cba6f7";
         timeout = 10;
       };
-    };
-  };
-  # Hyprpaper configuration
-  xdg.configFile."hypr/hyprpaper.conf".text = ''
-    preload = ~/.config/wallpapers/catppuccin.png
-    wallpaper = ,~/.config/wallpapers/catppuccin.png
-  '';
-
-  # Wallpaper picker script
-  xdg.configFile."hypr/scripts/wallpaper-picker.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-
-      # Directory containing wallpapers
-      WALLPAPER_DIR="$HOME/.config/wallpapers"
-
-      # Create directory if it doesn't exist
-      mkdir -p "$WALLPAPER_DIR"
-
-      # Use wofi as a selector
-      selected=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" \) | sort | wofi --dmenu --prompt "Select wallpaper:")
-
-      # If a wallpaper was selected
-      if [ -n "$selected" ]; then
-        # Update hyprpaper.conf
-        sed -i "s|^preload = .*$|preload = $selected|" "$HOME/.config/hypr/hyprpaper.conf"
-        sed -i "s|^wallpaper = .*$|wallpaper = ,$selected|" "$HOME/.config/hypr/hyprpaper.conf"
-        
-        # Kill hyprpaper and restart it
-        pkill hyprpaper
-        hyprpaper &
-        
-        notify-send "Wallpaper Changed" "Wallpaper set to $(basename "$selected")" --icon="$selected"
-      fi
-    '';
-    executable = true;
-  };
-  # Create a systemd user service to ensure hyprpaper starts properly
-  systemd.user.services.hyprpaper = {
-    Unit = {
-      Description = "Hyprland wallpaper daemon";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.hyprpaper}/bin/hyprpaper";
-      Restart = "on-failure";
-      RestartSec = 5;
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
     };
   };
 }
