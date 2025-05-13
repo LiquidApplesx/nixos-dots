@@ -1,5 +1,8 @@
 { config, pkgs, inputs, ... }:
 
+let
+  inherit (config.lib.home-manager) dag;
+in
 {
   imports = [
     ./waybar.nix
