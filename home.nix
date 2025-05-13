@@ -8,6 +8,7 @@
     ./modules/desktop/hyprland.nix
     ./modules/theming/catppuccin.nix
     ./modules/shell/zsh.nix
+    ./modules/gaming
     # Add more modules as needed
   ];
 

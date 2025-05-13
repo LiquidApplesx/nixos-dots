@@ -52,7 +52,7 @@
   users.users.kari = {
     isNormalUser = true;
     description = "kari";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "input" "gamemode" ];
   };
 
   # Allow unfree packages

@@ -33,6 +33,10 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./configuration.nix
+
+	    # Import gaming module at system level
+            ./modules/gaming/amd.nix
+            ./modules/gaming/steam.nix
            
 	    # Import system modules
 	    ./modules/system/shell.nix
