@@ -1,8 +1,5 @@
 { config, pkgs, inputs, ... }:
 
-let
-  inherit (config.lib.home-manager) dag;
-in
 {
   imports = [
     ./waybar.nix
@@ -180,6 +177,7 @@ in
 
   # Install necessary packages for Hyprland
   home.packages = with pkgs; [
+    curl
     wofi
     dunst
     hyprpaper
@@ -301,29 +299,42 @@ in
   # Create wallpapers directory with a default wallpaper
   xdg.configFile."wallpapers/.keep".text = "";
   
-  # Download the default wallpaper using a shell script
-  home.activation = {
-    downloadWallpaper = dag.entryAfter ["writeBoundary"] ''
-      $DRY_RUN_CMD mkdir -p $VERBOSE_ARG $HOME/.config/wallpapers
+  # Use a simple shell script to download wallpapers
+  xdg.configFile."hypr/scripts/download-wallpapers.sh" = {
+    text = ''
+      #!/usr/bin/env bash
       
-      if [ ! -f $HOME/.config/wallpapers/catppuccin.png ]; then
+      WALLPAPER_DIR="$HOME/.config/wallpapers"
+      mkdir -p "$WALLPAPER_DIR"
+      
+      # Default wallpaper
+      if [ ! -f "$WALLPAPER_DIR/catppuccin.png" ]; then
         echo "Downloading default Catppuccin wallpaper..."
-        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/catppuccin.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/minimalistic/catppuccin_gradient.png
+        curl -o "$WALLPAPER_DIR/catppuccin.png" "https://raw.githubusercontent.com/catppuccin/wallpapers/main/minimalistic/catppuccin_gradient.png"
       fi
       
-      # Download additional Catppuccin wallpapers
-      if [ ! -f $HOME/.config/wallpapers/rainbow.png ]; then
-        echo "Downloading additional Catppuccin wallpapers..."
-        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/rainbow.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/landscapes/rainbow.png
-      fi
+      # Additional wallpapers
+      WALLPAPERS=(
+        "https://raw.githubusercontent.com/catppuccin/wallpapers/main/landscapes/rainbow.png"
+        "https://raw.githubusercontent.com/catppuccin/wallpapers/main/misc/catppuccin_triangles.png"
+        "https://raw.githubusercontent.com/catppuccin/wallpapers/main/functional/graph.png"
+      )
       
-      if [ ! -f $HOME/.config/wallpapers/triangles.png ]; then
-        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/triangles.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/misc/catppuccin_triangles.png
-      fi
-      
-      if [ ! -f $HOME/.config/wallpapers/graph.png ]; then
-        $DRY_RUN_CMD ${pkgs.curl}/bin/curl $VERBOSE_ARG -o $HOME/.config/wallpapers/graph.png https://raw.githubusercontent.com/catppuccin/wallpapers/main/functional/graph.png
-      fi
+      for url in "${WALLPAPERS[@]}"; do
+        filename=$(basename "$url")
+        if [ ! -f "$WALLPAPER_DIR/$filename" ]; then
+          echo "Downloading $filename..."
+          curl -o "$WALLPAPER_DIR/$filename" "$url"
+        fi
+      done
     '';
+    executable = true;
+  };
+  
+  # Add script to Hyprland startup
+  wayland.windowManager.hyprland.settings = {
+    exec-once = [
+      "${config.xdg.configHome}/hypr/scripts/download-wallpapers.sh"
+    ];
   };
 }
