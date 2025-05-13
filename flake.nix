@@ -49,22 +49,4 @@
             }
           ] ++ sharedModules;
         };
-        
-        # ISO installer configuration
-        installer = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-          modules = [
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix"
-            ./modules/installer/configuration.nix
-          ] ++ sharedModules;
-        };
-      };
-      
-      packages.${system} = {
-        iso = self.nixosConfigurations.installer.config.system.build.isoImage;
-      };
-      
-      defaultPackage.${system} = self.packages.${system}.iso;
-    };
 }
