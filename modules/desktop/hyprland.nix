@@ -295,46 +295,4 @@
     '';
     executable = true;
   };
-
-  # Create wallpapers directory with a default wallpaper
-  xdg.configFile."wallpapers/.keep".text = "";
-  
-  # Use a simple shell script to download wallpapers
-  xdg.configFile."hypr/scripts/download-wallpapers.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      
-      WALLPAPER_DIR="$HOME/.config/wallpapers"
-      mkdir -p "$WALLPAPER_DIR"
-      
-      # Default wallpaper
-      if [ ! -f "$WALLPAPER_DIR/catppuccin.png" ]; then
-        echo "Downloading default Catppuccin wallpaper..."
-        curl -o "$WALLPAPER_DIR/catppuccin.png" "https://raw.githubusercontent.com/catppuccin/wallpapers/main/minimalistic/catppuccin_gradient.png"
-      fi
-      
-      # Additional wallpapers
-      WALLPAPERS=(
-        "https://raw.githubusercontent.com/catppuccin/wallpapers/main/landscapes/rainbow.png"
-        "https://raw.githubusercontent.com/catppuccin/wallpapers/main/misc/catppuccin_triangles.png"
-        "https://raw.githubusercontent.com/catppuccin/wallpapers/main/functional/graph.png"
-      )
-      
-      for url in "${WALLPAPERS[@]}"; do
-        filename=$(basename "$url")
-        if [ ! -f "$WALLPAPER_DIR/$filename" ]; then
-          echo "Downloading $filename..."
-          curl -o "$WALLPAPER_DIR/$filename" "$url"
-        fi
-      done
-    '';
-    executable = true;
-  };
-  
-  # Add script to Hyprland startup
-  wayland.windowManager.hyprland.settings = {
-    exec-once = [
-      "${config.xdg.configHome}/hypr/scripts/download-wallpapers.sh"
-    ];
-  };
 }
