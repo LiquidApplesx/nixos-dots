@@ -137,7 +137,7 @@
       bind = $mainMod, P, pseudo, # dwindle
       bind = $mainMod, J, togglesplit, # dwindle
       bind = $mainMod, F, exec, $browser
-      bind = $mainMod SHIFT, W, exec ~/.config/hypr/scripts/wallpaper-picker.sh
+      bind = $mainMod SHIFT, W, exec, ~/.config/hypr/scripts/wallpaper-picker.sh
       
       # Move focus
       bind = $mainMod, left, movefocus, l
