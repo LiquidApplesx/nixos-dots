@@ -53,7 +53,6 @@
     isNormalUser = true;
     description = "kari";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
   };
 
   # Allow unfree packages
@@ -61,14 +60,9 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget
     neovim
     steam
-    kitty
-    fastfetch
-    firefox-devedition-bin
-    github-cli
-    # Note: The theming and Hyprland packages are moved to home-manager configuration
+    wget
   ];
 
   # Fonts
@@ -116,7 +110,7 @@
 
   # Enable flakes and nix-command
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;  # Updated package name
     extraOptions = "experimental-features = nix-command flakes";
   };
 

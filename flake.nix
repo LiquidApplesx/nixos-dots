@@ -30,10 +30,13 @@
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {  # Using 'nixos' as hostname from your config
           inherit system;
-          specialArgs = { inherit inputs outputs; };
+          specialArgs = { inherit inputs; };
           modules = [
             ./configuration.nix
-            
+           
+	    # Import system modules
+	    ./modules/system/shell.nix
+
             # Import Hyprland NixOS module
             hyprland.nixosModules.default
             
@@ -42,8 +45,9 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.users.kari = import ./home.nix;  # Using 'kari' as username from your config
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.kari = import ./home.nix;
+	      home-manager.backupFileExtension = "backup";
             }
           ];
         };
