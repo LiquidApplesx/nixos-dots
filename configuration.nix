@@ -110,7 +110,7 @@
 
   # Enable flakes and nix-command
   nix = {
-    package = pkgs.nixVersions.stable;  # Updated package name
+    package = pkgs.nixVersions.stable;
     extraOptions = "experimental-features = nix-command flakes";
   };
 
