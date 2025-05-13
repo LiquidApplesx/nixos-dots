@@ -5,7 +5,7 @@
   home.packages = with pkgs; [
     swww            # Wallpaper setter
     pywal           # Color scheme generator
-    python3Packages.pywalfox  # Firefox theme integration
+    pywalfox-native  # Firefox theme integration
     # Adding some dependencies your script might need
     swaybg          # Fallback wallpaper setter
   ];
