@@ -49,7 +49,8 @@
       # Execute apps at launch
       exec-once = waybar
       exec-once = dunst
-      exec-once = sleep 1 && ~/.config/hypr/scripts/init-wallpaper.sh
+      exec-once = swww-daemon && swww restore
+      exec-once = sleep 1 && $HOME/.config/hypr/scripts/init-wallpaper.sh
       
       # Input config
       input {

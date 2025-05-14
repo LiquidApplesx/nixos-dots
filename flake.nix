@@ -23,7 +23,7 @@
       # Define shared modules
       sharedModules = [
         ./modules/gaming/amd.nix
-        ./modules/gaming/steam.nix
+        ./modules/gaming/steam.nix	
       ];
     in
     {
@@ -35,7 +35,7 @@
             ./configuration.nix
             # Import system modules
             ./modules/system/shell.nix
-	    ./modules/system/nix/gc.nix
+	    ./modules/system/nix/gc.nix 
             # Import Hyprland NixOS module
             hyprland.nixosModules.default
             
